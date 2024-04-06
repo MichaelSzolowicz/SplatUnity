@@ -2,20 +2,24 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: InkableSurface
   m_Shader: {fileID: -6465566751694194690, guid: 8fcfafac6d61c594aa07f3a31fa17dc8, type: 3}
-  m_ShaderKeywords: 
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -67,9 +71,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - Vector1_49b3e0933f4249f5bdd71d60202d8328: 1
     - Vector1_975cead425bc45d9b600a0b1d68a77b8: 2.3
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_243c94d567a6495a86b9b3c52087cf64: {r: 0.21007515, g: 0.16487186, b: 0.8962264, a: 0}
     - Color_28cde616faab479d80713dc8ad4c24c9: {r: 0.23641238, g: 0.8396226, b: 0.17822176, a: 0}
@@ -78,3 +85,16 @@ Material:
     - Vector4_8628960f00cc45d7bb3131a5439ca228: {r: 1, g: 0.2, b: 0.1, a: 0}
     - _InkColor: {r: 0.23641238, g: 0.8396226, b: 0.17822176, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &154508921063875060
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
