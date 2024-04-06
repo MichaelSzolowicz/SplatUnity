@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-using System.IO;
-using System.Collections;
 
-public class SplatmapReader : MonoBehaviour
+public class SplatmaskReader : MonoBehaviour
 {
     [Tooltip("Most recently read color.")]
     private Color color;
@@ -29,11 +27,11 @@ public class SplatmapReader : MonoBehaviour
     {
         callbackDelgate = callbackFunction;
 
-         var rt = RenderTexture.GetTemporary(1, 1, 0, RenderTextureFormat.ARGBFloat);
+        var rt = RenderTexture.GetTemporary(1, 1, 0, RenderTextureFormat.ARGBFloat);
 
-         Graphics.CopyTexture(target, 0, 0, (int)(uv.x * target.width), (int)(uv.y * target.height), 1, 1, rt, 0, 0, 0, 0);
-         AsyncGPUReadback.Request(rt, 0, TextureFormat.ARGB32, OnCompleteReadback);
-         RenderTexture.ReleaseTemporary(rt);
+        Graphics.CopyTexture(target, 0, 0, (int)(uv.x * target.width), (int)(uv.y * target.height), 1, 1, rt, 0, 0, 0, 0);
+        AsyncGPUReadback.Request(rt, 0, TextureFormat.ARGB32, OnCompleteReadback);
+        RenderTexture.ReleaseTemporary(rt);
     }
 
     /// <summary>
@@ -49,7 +47,7 @@ public class SplatmapReader : MonoBehaviour
         }
 
         // Async operations can return after the game ends, so check to ensure we are valid.
-        if(Application.isPlaying)
+        if (Application.isPlaying)
         {
             tex.LoadRawTextureData(request.GetData<uint>());
             tex.Apply();
