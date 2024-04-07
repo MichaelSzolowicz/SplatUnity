@@ -6,9 +6,7 @@ Shader "Unlit/Blend"
     }
     SubShader
     {
-       // Tags { "RenderType"="Transparent" }
-       Blend One OneMinusSrcAlpha
-
+        Blend One OneMinusSrcAlpha
 
         Pass
         {

@@ -1,20 +1,18 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Unlit/SplatMask"
+Shader "Unlit/Splatmask"
 {
     Properties
     {
         _MainTex("Base (RGB)", 2D) = "black" {}
         _InkColor("Painter Color", Color) = (1,0,0,1)
     }
-        SubShader
+    SubShader
     {
         Cull Off ZWrite Off ZTest Off
 
         Pass
         {
-            Conservative True
-
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -70,7 +68,8 @@ Shader "Unlit/SplatMask"
                 float4 col = tex2D(_MainTex, i.uv);
                 float m = mask(i.worldPos, _SplatPos, _Radius, _Hardness);
                 float edge = m * _Strength;
-                return lerp(col, _InkColor, edge);
+                col = lerp(col, _InkColor, edge);
+                return col;
                 
             }
             ENDCG

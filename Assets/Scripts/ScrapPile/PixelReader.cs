@@ -67,7 +67,7 @@ public class PixelReader : MonoBehaviour
         if (!hit.transform.GetComponent<SplatableObject>()) return false;
 
 
-        splatmap = hit.transform.GetComponent<SplatableObject>().Splatmap;
+        splatmap = hit.transform.GetComponent<SplatableObject>().Splatmask;
 
         if (!splatmap) return false;
 

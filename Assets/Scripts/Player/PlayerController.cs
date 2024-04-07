@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     /** Internal objects **/
     protected PlayerControls playerControls;
-    protected SplatmapReader splatmapReader;
+    protected SplatmaskReader SplatmaskReader;
 
     /** Movement state control **/
     [SerializeField]
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
         isSquid = false;
 
         // Object initialization
-        splatmapReader = new SplatmapReader();
+        SplatmaskReader = new SplatmaskReader();
 
         /// Important: Start movement state update loop.
         Invoke("UpdateMovementState", .032f);
@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Probes the surface, looking for a SplatableObject to read ink values from.
-    /// This function gets the values and calls ReadPixel() on SplatmapReader, which in turn calls 
+    /// This function gets the values and calls ReadPixel() on SplatmaskReader, which in turn calls 
     /// FinishUpdateMovementState() once it finished reading the pixel value.
     /// </summary>
     protected void UpdateMovementState()
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
             splatObj = hit.collider.GetComponent<SplatableObject>();
             if(splatObj)
             {
-                splatmapReader.ReadPixel(splatObj.Splatmap, hit.textureCoord, FinishUpdateMovementSate);
+                SplatmaskReader.ReadPixel(splatObj.Splatmask, hit.textureCoord, FinishUpdateMovementSate);
                 return;
             }
         }
@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             splatObj = hit.collider.GetComponent<SplatableObject>();
             if (splatObj)
             {
-                splatmapReader.ReadPixel(splatObj.Splatmap, hit.textureCoord, FinishUpdateMovementSate);
+                SplatmaskReader.ReadPixel(splatObj.Splatmask, hit.textureCoord, FinishUpdateMovementSate);
             }
         }
         else FinishUpdateMovementSate(Color.clear);
@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="color"></param>
     protected void FinishUpdateMovementSate(Color color)
     {
-        // This function can be called late by SplatmapReader, so make sure this still exists before doing anything.
+        // This function can be called late by SplatmaskReader, so make sure this still exists before doing anything.
         if (!this) return;
 
         /// Wall Swimming

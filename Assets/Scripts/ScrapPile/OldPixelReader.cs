@@ -12,7 +12,7 @@ public class OldPixelReader : MonoBehaviour
     Ray mouseRay;
     RaycastHit hit;
 
-    public RenderTexture splatmap;
+    public RenderTexture splatmask;
 
  
 
@@ -25,7 +25,7 @@ public class OldPixelReader : MonoBehaviour
     private void ReadPixelUpdate()
     {
 
-        bool isValidHit = GetSplatmapCoords(ref _textureCoords);
+        bool isValidHit = GetSplatmaskCoords(ref _textureCoords);
 
         if(isValidHit)
         {
@@ -35,7 +35,7 @@ public class OldPixelReader : MonoBehaviour
 
             dst = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
 
-            RenderTexture.active = splatmap;
+            RenderTexture.active = splatmask;
             dst.ReadPixels(copy, 0, 0);
             dst.Apply();
 
@@ -53,13 +53,13 @@ public class OldPixelReader : MonoBehaviour
 
             yield return new WaitForSeconds(0);
 
-            bool isValidHit = GetSplatmapCoords(ref _textureCoords);
+            bool isValidHit = GetSplatmaskCoords(ref _textureCoords);
 
             Rect copy = new Rect((int)_textureCoords.x, (int)_textureCoords.y, 1, 1);
 
             print(copy);
 
-            RenderTexture.active = splatmap;
+            RenderTexture.active = splatmask;
             dst.ReadPixels(copy, 0, 0);
             dst.Apply();
 
@@ -69,7 +69,7 @@ public class OldPixelReader : MonoBehaviour
         }
     }
 
-    bool GetSplatmapCoords(ref Vector2 textureCoords)
+    bool GetSplatmaskCoords(ref Vector2 textureCoords)
     {
         mouseScreenPos = Input.mousePosition;
         mouseRay = Camera.main.ScreenPointToRay(mouseScreenPos);
@@ -83,13 +83,13 @@ public class OldPixelReader : MonoBehaviour
         if (!hit.transform.GetComponent<SplatableObject>()) return false;
 
 
-        splatmap = hit.transform.GetComponent<SplatableObject>().Splatmap;
+        splatmask = hit.transform.GetComponent<SplatableObject>().Splatmask;
 
-        if (!splatmap) return false;
+        if (!splatmask) return false;
 
         textureCoords = hit.textureCoord;
-        textureCoords.x *= splatmap.width;
-        textureCoords.y *= splatmap.height;
+        textureCoords.x *= splatmask.width;
+        textureCoords.y *= splatmask.height;
 
         return true;
     }

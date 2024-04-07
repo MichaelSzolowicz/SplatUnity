@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: InkableSurface
-  m_Shader: {fileID: -6465566751694194690, guid: 8fcfafac6d61c594aa07f3a31fa17dc8, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 5fca8368123c2a7419bd69fdc1c69285, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,6 +43,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Glossiness:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metallic:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_1b98a0a75d544c879cb0c0523cc66265_Texture_1:
         m_Texture: {fileID: 2800000, guid: 5ac41e0e9e893484ebb72c0b2fa8c6a9, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -52,6 +76,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Splatmap:
+        m_Texture: {fileID: 8400000, guid: 8ee24612610e05a46b477a566c78b5a5, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _baseColor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _splatmask:
         m_Texture: {fileID: 8400000, guid: 8ee24612610e05a46b477a566c78b5a5, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -77,6 +109,7 @@ Material:
     - Vector1_975cead425bc45d9b600a0b1d68a77b8: 2.3
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _uvScale: 0.1
     m_Colors:
     - Color_243c94d567a6495a86b9b3c52087cf64: {r: 0.21007515, g: 0.16487186, b: 0.8962264, a: 0}
     - Color_28cde616faab479d80713dc8ad4c24c9: {r: 0.23641238, g: 0.8396226, b: 0.17822176, a: 0}
@@ -84,6 +117,10 @@ Material:
     - Vector2_7995e2f51e40432e949d96b7489798a1: {r: -18.37, g: 0, b: 0, a: 0}
     - Vector4_8628960f00cc45d7bb3131a5439ca228: {r: 1, g: 0.2, b: 0.1, a: 0}
     - _InkColor: {r: 0.23641238, g: 0.8396226, b: 0.17822176, a: 1}
+    - _InkColor1: {r: 1, g: 0, b: 0, a: 1}
+    - _InkColor2: {r: 0, g: 1, b: 0, a: 1}
+    - _color1: {r: 1, g: 0, b: 0, a: 0}
+    - _color2: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &154508921063875060
 MonoBehaviour:
