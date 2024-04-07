@@ -10,6 +10,6 @@ public class ColliderPainter : MonoBehaviour
 
         if (!collision.transform.GetComponent<SplatableObject>()) return;
 
-        collision.transform.GetComponent<SplatableObject>().DrawSplat(collision.GetContact(0).point, .5f, .7f, .9f, new Color(1, 0, 0, 1));
+        //collision.transform.GetComponent<SplatableObject>().DrawSplat(collision.GetContact(0).point, .5f, .7f, .9f, new Color(1, 0, 0, 1));
     }
 }

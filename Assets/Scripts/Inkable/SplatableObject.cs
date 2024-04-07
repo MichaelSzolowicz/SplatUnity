@@ -54,12 +54,13 @@ public class SplatableObject : MonoBehaviour
         cmd = new CommandBuffer();
     }
 
-    public void DrawSplat(Vector3 worldPos, float radius, float hardness, float strength, Color inkColor)
+    public void DrawSplat(Vector3 worldPos, Vector3 normal, float radius, float hardness, float strength, Color inkColor)
     {
         splatmaskMaterial.SetFloat(Shader.PropertyToID("_Radius"), radius);
         splatmaskMaterial.SetFloat(Shader.PropertyToID("_Hardness"), hardness);
         splatmaskMaterial.SetFloat(Shader.PropertyToID("_Strength"), strength);
         splatmaskMaterial.SetVector(Shader.PropertyToID("_SplatPos"), worldPos);
+        splatmaskMaterial.SetVector(Shader.PropertyToID("_Normal"), normal);
         splatmaskMaterial.SetVector(Shader.PropertyToID("_InkColor"), inkColor);
 
         RenderTexture temp = RenderTexture.GetTemporary(splatmask.width, splatmask.height, 0, RenderTextureFormat.ARGBFloat);

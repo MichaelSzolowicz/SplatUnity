@@ -21,6 +21,7 @@ Shader "Unlit/Blend"
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
                 float4 color : COLOR;
+                float3 normal : NORMAL;
             };
 
             struct v2f
@@ -28,6 +29,7 @@ Shader "Unlit/Blend"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float4 color : TEXCOORD1;
+                float3 normal : TEXCOORD2;
             };
 
             sampler2D _MainTex;

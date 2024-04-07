@@ -29,7 +29,7 @@ public class MousePainter : MonoBehaviour
 
         //print(hit.point);
 
-        splatObject.DrawSplat(hit.point, radius, hardness, strength, inkColor);
+        //splatObject.DrawSplat(hit.point, radius, hardness, strength, inkColor);
 
     }
 }

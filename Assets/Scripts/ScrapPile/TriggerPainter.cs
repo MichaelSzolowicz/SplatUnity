@@ -11,6 +11,6 @@ public class TriggerPainter : MonoBehaviour
       
         if (!other.transform.GetComponent<SplatableObject>()) return;
 
-        other.transform.GetComponent<SplatableObject>().DrawSplat(transform.position, .5f, .7f, .9f, new Color(1, 0, 0, 1));
+        //other.transform.GetComponent<SplatableObject>().DrawSplat(transform.position, .5f, .7f, .9f, new Color(1, 0, 0, 1));
     }
 }
