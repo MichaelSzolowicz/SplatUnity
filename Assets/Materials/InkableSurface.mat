@@ -80,11 +80,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _baseColor:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 514839f5636ae63469496934b5b5ba8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _metallicSmoothness:
+        m_Texture: {fileID: 2800000, guid: b1a1a92102164374f8b8d211957b9f70, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _normal:
+        m_Texture: {fileID: 2800000, guid: f9f8d36fcc37d434490a6cb29ccb4a76, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _smoothness:
-        m_Texture: {fileID: 2800000, guid: 41c5ba12aaca10249aa74df3d62c4434, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1954ad71a0e3bcf438c14eab46b4189f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _splatmask:
@@ -114,6 +122,7 @@ Material:
     - _Float: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _inkMetallic: 0
     - _inkNormalStrength: 2.5
     - _inkSmoothness: 1
     - _troughHeight: 1.23
