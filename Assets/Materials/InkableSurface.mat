@@ -88,7 +88,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _normal:
-        m_Texture: {fileID: 2800000, guid: f9f8d36fcc37d434490a6cb29ccb4a76, type: 3}
+        m_Texture: {fileID: 2800000, guid: 161c2eca2ae5918439b54ede0c66b884, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _smoothness:
@@ -125,6 +125,8 @@ Material:
     - _inkMetallic: 0
     - _inkNormalStrength: 2.5
     - _inkSmoothness: 1
+    - _normalStrength: 1
+    - _smoothness: 1
     - _troughHeight: 1.23
     - _troughWidth: 1.6
     - _uvScale: 1
@@ -139,6 +141,8 @@ Material:
     - _InkColor2: {r: 0, g: 1, b: 0, a: 1}
     - _color1: {r: 1, g: 0, b: 0, a: 0}
     - _color2: {r: 0, g: 1, b: 0, a: 0}
+    - _inkColor1: {r: 1, g: 0, b: 0, a: 0}
+    - _inkColor2: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &154508921063875060
 MonoBehaviour:
