@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5393962742692073309}
   - component: {fileID: 8866827015484765990}
   - component: {fileID: -649716097143579931}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: InkBlob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ Rigidbody:
   m_GameObject: {fileID: 5393962742692073304}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 0.5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -134,7 +134,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &8866827015484765990
 MonoBehaviour:
   m_ObjectHideFlags: 0

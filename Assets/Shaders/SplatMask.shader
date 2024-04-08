@@ -72,8 +72,8 @@ Shader "Unlit/Splatmask"
 
                 // Compare normals and don't draw on surfaces facing the opposite direction (underside of platform or ceiling above us.)
                 float d = dot(i.normal, _Normal);
-                d = d + .05;    // Give a little bit of leniance so it doesn't hard cutoff at 90 degrees.
-                d = clamp(d, -1, 1);
+                d = d - .05;    // Give a little bit of leniance so it cuts off before 90 degrees.
+                d = clamp(d, 0, 1);
                 d = ceil(d);
                 col = col * d;
 

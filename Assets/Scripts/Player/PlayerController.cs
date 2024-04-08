@@ -118,6 +118,11 @@ public class PlayerController : MonoBehaviour
         Invoke("UpdateMovementState", .032f);
     }
 
+    protected void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     protected void Update()
     {
         /// Camera rotation

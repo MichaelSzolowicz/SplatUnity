@@ -116,7 +116,7 @@ MonoBehaviour:
   gravityScale: 1.55
   minSlopeGradation: 0.5
   slopeCheckTolerance: 0.01
-  inkAlphaMinThreshold: 0.1
+  inkAlphaMinThreshold: 0
   updateMovementStateDelay: 0.032
   enemyInkSlowingFactor: 0.2
   swimSpeedMultiplier: 2
