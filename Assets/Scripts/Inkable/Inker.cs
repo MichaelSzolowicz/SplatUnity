@@ -12,7 +12,7 @@ public abstract class Inker : MonoBehaviour
 
     public Color inkColor;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         SetInkColor();
     }
