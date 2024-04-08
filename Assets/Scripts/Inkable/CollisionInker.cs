@@ -18,6 +18,7 @@ public class CollisionInker : Inker
         if(splatObj)
         {
             Debug.Log(name + " hit " + collision.gameObject.name);
+            Debug.DrawLine(collision.contacts[0].point, collision.contacts[0].point + collision.contacts[0].normal * 3, Color.magenta, 0.1f);
 
             splatObj.DrawSplat(collision.contacts[0].point, collision.contacts[0].normal, radius, hardness, strength, inkColor);
         }

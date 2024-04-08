@@ -53,7 +53,7 @@ Shader "Unlit/Splatmask"
                 float4 uv = float4(0, 0, 0, 1);
                 uv.xy = (v.uv.xy * 2 - 1) * float2(1, _ProjectionParams.x);
                 o.vertex = uv;
-                o.normal = v.normal;
+                o.normal = mul(unity_ObjectToWorld, v.normal);
                 return o;
             }
 

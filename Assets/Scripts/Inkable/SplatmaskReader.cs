@@ -15,7 +15,12 @@ public class SplatmaskReader : MonoBehaviour
     private CallbackDelgate callbackDelgate;
 
     [Tooltip("Buffer for GPU readback pixel color.")]
-    Texture2D tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+    Texture2D tex;
+
+    private void Awake()
+    {
+        tex = new Texture2D(1, 1, TextureFormat.ARGB32, false);
+    }
 
     /// <summary>
     /// Read the color of a pixel at uv coordinate on rendertexture using Async GPU Readback.

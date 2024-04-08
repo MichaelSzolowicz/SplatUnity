@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -6,8 +7,9 @@ using UnityEngine.Rendering;
 /// </summary>
 public class SplatableObject : MonoBehaviour
 {
+
     [Tooltip("Destination target for ink blots on this object.")]
-    public RenderTexture splatmask;
+    private RenderTexture splatmask;
     public RenderTexture Splatmask { get { return splatmask; } }
     [SerializeField, Tooltip("If left blank a blank render texture of size " +
         "textureSize will be automatically generated.")]
@@ -16,7 +18,7 @@ public class SplatableObject : MonoBehaviour
     protected int textureSize = 1024;
 
     [Tooltip("Buffer to hold new splats before they are blended with the actual splatmap.")]
-    public RenderTexture splatBuffer;
+    private RenderTexture splatBuffer;
     [Tooltip("Material to hold the splatmask shader and properties.")]
     private Material splatmaskMaterial;
     [Tooltip("Material that should define belending operation for new splats.")]
@@ -27,7 +29,7 @@ public class SplatableObject : MonoBehaviour
     private CommandBuffer cmd;
 
 
-    void Start()
+    void Awake()
     {
         // Get the splatmask shader
         splatmaskMaterial = new Material(Shader.Find("Unlit/Splatmask"));
@@ -57,6 +59,12 @@ public class SplatableObject : MonoBehaviour
         SplatableObjectsManager.Instance.RegisterSplatableObject(this);
         // Cache a reference to the manager's command buffer so we don't have to retrieve it constantly.
         cmd = SplatableObjectsManager.Instance.CommandBuffer;
+
+        // We need to push some pixels to the splatmap, otherwise the renderer seems to get confused and flash other 
+        // objects' splatmaps onto this one.
+        cmd.Blit(splatBuffer, splatmask, blendMaterial);
+        Graphics.ExecuteCommandBuffer(cmd);
+        cmd.Clear();
     }
 
     /// <summary>

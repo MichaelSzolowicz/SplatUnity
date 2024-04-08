@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
         isSquid = false;
 
         // Object initialization
-        SplatmaskReader = new SplatmaskReader();
+        SplatmaskReader = gameObject.AddComponent<SplatmaskReader>();
 
         /// Important: Start movement state update loop.
         Invoke("UpdateMovementState", .032f);
