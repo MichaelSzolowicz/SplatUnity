@@ -293,7 +293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4800295623315155305, guid: 36b061297bfd31544b51ff736d3f819f, type: 3}
       propertyPath: inkAlphaMinThreshold
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4800295623315155306, guid: 36b061297bfd31544b51ff736d3f819f, type: 3}
       propertyPath: m_LocalPosition.x
