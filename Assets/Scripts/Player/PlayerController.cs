@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     protected void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     protected void Update()
@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
             Vector3.Dot(surfaceProbeHit.normal, Vector3.up) - slopeCheckTolerance < minSlopeGradation
             && color.a > inkAlphaMinThreshold && color.r > color.g && isSquid)
         {
-            print("Wall Swimming");
+            //print("Wall Swimming");
             currentMovementState = MovementState.WallSwimming;
             maxHorizontalSpeed =  baseMaxHorizontalSpeed;
             grounded = false;
@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
                 Invoke("UpdateMovementState", updateMovementStateDelay);
                 return;
             }
-            print("EnemyInk");
+            //print("EnemyInk");
             currentMovementState = MovementState.EnemyInk;
             isSquid = false;
             Invoke("UpdateMovementState", updateMovementStateDelay);
@@ -247,7 +247,7 @@ public class PlayerController : MonoBehaviour
         }
 
         /// Default case
-        print("Walking");
+        //print("Walking");
         currentMovementState = MovementState.Walking;
         maxHorizontalSpeed = baseMaxHorizontalSpeed;
         

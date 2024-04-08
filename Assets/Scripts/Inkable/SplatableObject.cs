@@ -1,33 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// Defines objects that can receive ink splats from various types of inker.
+/// </summary>
 public class SplatableObject : MonoBehaviour
 {
     [Tooltip("Destination target for ink blots on this object.")]
     public RenderTexture splatmask;
-    public RenderTexture splatBuffer;
     public RenderTexture Splatmask { get { return splatmask; } }
-
     [SerializeField, Tooltip("If left blank a blank render texture of size " +
         "textureSize will be automatically generated.")]
     protected Texture sourceMask;
     [SerializeField]
     protected int textureSize = 1024;
 
+    [Tooltip("Buffer to hold new splats before they are blended with the actual splatmap.")]
+    public RenderTexture splatBuffer;
     [Tooltip("Material to hold the splatmask shader and properties.")]
     private Material splatmaskMaterial;
+    [Tooltip("Material that should define belending operation for new splats.")]
     private Material blendMaterial;
     [Tooltip("Mesh material for this object. Expected to be first material slot; " +
-        "expected to \"_Splatmap\" tex2D property.")]
+        "expected to have \"_Splatmap\" tex2D property.")]
     private Material thisMaterial;
     private CommandBuffer cmd;
+
 
     void Start()
     {
         // Get the splatmask shader
         splatmaskMaterial = new Material(Shader.Find("Unlit/Splatmask"));
+        // Create blend material
+        blendMaterial = new Material(Shader.Find("Unlit/Blend"));
 
         if (sourceMask)
         {
@@ -45,15 +50,24 @@ public class SplatableObject : MonoBehaviour
         thisMaterial = GetComponent<Renderer>().material;
         thisMaterial.SetTexture("_splatmask", splatmask);
 
-        // Create blend material
-        blendMaterial = new Material(Shader.Find("Unlit/Blend"));
-
+        // Init buffer.
         splatBuffer = new RenderTexture(splatmask.width, splatmask.height, 0, RenderTextureFormat.ARGBFloat);
 
-        // Cache a command buffer for later
-        cmd = new CommandBuffer();
+        // Register with the splatable object manager. The manager is a singleton so one will always exist after this call.
+        SplatableObjectsManager.Instance.RegisterSplatableObject(this);
+        // Cache a reference to the manager's command buffer so we don't have to retrieve it constantly.
+        cmd = SplatableObjectsManager.Instance.CommandBuffer;
     }
 
+    /// <summary>
+    /// Draw a circular brush stroke into this object's splatmask.
+    /// </summary>
+    /// <param name="worldPos"></param>
+    /// <param name="normal"></param>
+    /// <param name="radius"></param>
+    /// <param name="hardness"></param>
+    /// <param name="strength"></param>
+    /// <param name="inkColor"></param>
     public void DrawSplat(Vector3 worldPos, Vector3 normal, float radius, float hardness, float strength, Color inkColor)
     {
         splatmaskMaterial.SetFloat(Shader.PropertyToID("_Radius"), radius);
@@ -63,14 +77,12 @@ public class SplatableObject : MonoBehaviour
         splatmaskMaterial.SetVector(Shader.PropertyToID("_Normal"), normal);
         splatmaskMaterial.SetVector(Shader.PropertyToID("_InkColor"), inkColor);
 
-        RenderTexture temp = RenderTexture.GetTemporary(splatmask.width, splatmask.height, 0, RenderTextureFormat.ARGBFloat);
-        cmd.SetRenderTarget(temp);
+        cmd.SetRenderTarget(splatBuffer);
         cmd.DrawRenderer(GetComponent<Renderer>(), splatmaskMaterial);
 
-        cmd.Blit(temp, splatmask, blendMaterial);
+        cmd.Blit(splatBuffer, splatmask, blendMaterial);
         
         Graphics.ExecuteCommandBuffer(cmd);
         cmd.Clear();
-        RenderTexture.ReleaseTemporary(temp);
     }
 }
