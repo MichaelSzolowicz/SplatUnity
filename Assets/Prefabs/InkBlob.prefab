@@ -149,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   radius: 2
-  hardness: 0
+  hardness: 0.25
   strength: 1
   inkColor: {r: 0, g: 1, b: 0, a: 0}
 --- !u!114 &-649716097143579931
