@@ -126,6 +126,7 @@ Material:
     - _inkNormalStrength: 1
     - _inkSmoothness: 1
     - _normalStrength: 1
+    - _ripplesScale: 80
     - _ripplesStrength: 5
     - _smoothness: 1
     - _troughHeight: 1.23
