@@ -123,11 +123,13 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _inkMetallic: 0
-    - _inkNormalStrength: 2.5
+    - _inkNormalStrength: 1
     - _inkSmoothness: 1
     - _normalStrength: 1
+    - _ripplesStrength: 5
     - _smoothness: 1
     - _troughHeight: 1.23
+    - _troughStrength: 1
     - _troughWidth: 1.6
     - _uvScale: 1
     m_Colors:
