@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 8077530138525923832}
   - component: {fileID: 3783990365772751404}
   - component: {fileID: 8349332016726136773}
-  - component: {fileID: 5655099888670863185}
+  - component: {fileID: 3008048494627583663}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -158,7 +158,7 @@ MonoBehaviour:
   maxGroundSpeed: 5
   acceleration: 5
   braking: 0
-  maxWalkableSlopeAngle: 80
+  maxWalkableSlopeAngle: 1
   gravityScale: 1
   terminalVelocity: 10
   maxJumpHeight: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1621f6d26747b642a8f2380abfbe43d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &5655099888670863185
+--- !u!54 &3008048494627583663
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

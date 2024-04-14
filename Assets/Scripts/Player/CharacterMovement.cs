@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(CapsuleCollider))]
@@ -33,10 +34,12 @@ public class CharacterMovement : MonoBehaviour
     public float maxJumpHoldTime;
 
     protected CapsuleCollider capsule;
+    protected Rigidbody rb;
 
     protected void Start()
     {
         capsule = GetComponent<CapsuleCollider>();
+        rb = GetComponent<Rigidbody>();
     }
 
     protected void Update()
@@ -63,14 +66,69 @@ public class CharacterMovement : MonoBehaviour
         Vector3 finalVelocity = new Vector3(horizontalVel.x, verticalVel, horizontalVel.y);
         Vector3 deltaPos = finalVelocity * deltaTime;
 
-        if(floorNormal.magnitude > .1f)
+        transform.position += deltaPos;
+
+        // Sweep against new pos
+        RaycastHit[] hits = new RaycastHit[5];
+        hits = Physics.CapsuleCastAll(transform.position + Vector3.up * .5f, transform.position - Vector3.up * .5f, .5f, deltaPos.normalized, deltaPos.magnitude);
+
+        if (hits.Length <= 0) isGrounded = false;
+        foreach (RaycastHit hit in hits)
         {
-            float size = deltaPos.magnitude;
-            deltaPos = Vector3.ProjectOnPlane(deltaPos, floorNormal);
-            deltaPos = deltaPos.normalized * size;
+            bool isGroundedSet = false;
+            Vector3 normal = CorrectOverlap(hit);
+
+            if(normal.magnitude > .01f)
+            {
+                normal = normal.normalized;
+                Debug.DrawLine(hit.point, hit.point + normal * 3, Color.magenta, 10f);
+
+                Vector2 flatNormal = new Vector2(normal.x, normal.z);
+                float velAlongNormal = Vector3.Dot(horizontalVel, flatNormal);
+                horizontalVel -= flatNormal * velAlongNormal;
+
+                Debug.Log(" impulse " + (flatNormal * velAlongNormal));
+
+                float angle = Mathf.Acos(Vector3.Dot(normal, Vector3.up)) * Mathf.Rad2Deg;
+                Debug.Log("angle " + (angle < maxWalkableSlopeAngle));
+                if(!isGroundedSet) isGroundedSet = isGrounded = angle < maxWalkableSlopeAngle;
+            }
         }
 
-        transform.position += deltaPos;
+        //UpdateIsGrounded();
+        //Debug.Log(isGrounded);
+        if (isGrounded) verticalVel = 0;
+
+
+        // Apply remainder of delta pos after correction parallel to surface
+    }
+
+    protected Vector3 CorrectOverlap(RaycastHit hit)
+    {
+        Collider collider = hit.collider;
+        Vector3 correction;
+        float distance;
+        Physics.ComputePenetration(GetComponent<CapsuleCollider>(), transform.position, transform.rotation, collider, collider.transform.position, collider.transform.rotation, out correction, out distance);
+        transform.position += correction * distance;
+        return correction * distance;
+    }
+
+    protected void UpdateIsGrounded()
+    {
+        Vector3 start = transform.position;
+        Vector3 end = transform.position - Vector3.up * ((capsule.height / 2) + .3f);
+        RaycastHit hit;
+
+        if (Physics.Linecast(start, end, out hit))
+        {
+            float angle = Mathf.Acos(Vector3.Dot(hit.normal, Vector3.up)) * Mathf.Rad2Deg;
+            Debug.Log(angle);
+            isGrounded = angle < maxWalkableSlopeAngle;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     /// <summary>
@@ -79,90 +137,16 @@ public class CharacterMovement : MonoBehaviour
     /// <param name="move"></param>
     protected void PerformMove(MoveInfo move)
     {
+        //Debug.Log(isGrounded);
         Vector2 a = move.input * acceleration;
         if (a.magnitude > acceleration) { a = a.normalized * acceleration; }
-        horizontalVel += a * move.time;
-        //else horizontalVel = Vector3.zero;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log(name + " collision with " + collision.collider.gameObject.name);  
-        HandleCollision(collision);
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        HandleCollision(collision);
-    }
-
-    protected void HandleCollision(Collision collision)
-    {
-
-
-        // Correct our position so the capsule doesn't clip inside other geometry.
-        Vector3 correction;
-        float distance;
-        Physics.ComputePenetration(GetComponent<CapsuleCollider>(), transform.position, transform.rotation, collision.collider, collision.transform.position, collision.transform.rotation, out correction, out distance);
-
-        if (distance > 0)
-        {
-            // Only apply the correction if it is valid.
-            transform.Translate(correction * distance);
-        }
-
-        // How many contacts do we typically get?
-        Debug.Log(name + " contact count " + collision.contactCount);   // Quite a few. Sometimes as many as four when colliding wiht two surfaces on the same mesh collider.
-
-
-        foreach (var contact in collision.contacts)
-        {
-            // Apply normal force. (Do it on  each  one for now; later it might(?) be faster to  pick one to do it on).
-            Vector2 flatNormal = new Vector2(contact.normal.x, contact.normal.z);
-            float velAlongNormal = Vector2.Dot(horizontalVel, flatNormal);
-            horizontalVel -= flatNormal * velAlongNormal;
-            break;
-        }
-
-
-        // Cancel z velocity if moving down towards the ground
-        if (isGrounded && verticalVel < 0) verticalVel = 0;
-
-        UpdateIsGrounded();
-    }
-
-    Vector3 floorNormal;
-
-    
-    protected void UpdateIsGrounded()
-    {
-        Vector3 start = transform.position;
-        Vector3 end = start + Vector3.down * ((capsule.height / 2) + .1f);
-        RaycastHit hit;
-
-        // Check if slope is walkable
-        if (Physics.Linecast(start, end, out hit))
-        {
-            float angle = Mathf.Acos(Vector3.Dot(hit.normal, Vector3.up)) * Mathf.Rad2Deg;
-            isGrounded = (angle <= maxWalkableSlopeAngle);
-
-            floorNormal = hit.normal;
-
-            Debug.Log(name + " grounded? " + isGrounded);
-        }
-        else
-        {
-            isGrounded = false;
-
-            floorNormal = Vector3.zero;
-        }
+        if(isGrounded) horizontalVel += a * move.time;
     }
     
 
     protected void ApplyGravity(float deltaTime)
     {
-        //if(!isGrounded) 
-            verticalVel -= 9.8f * gravityScale * deltaTime;
+        verticalVel -= 9.8f * gravityScale * deltaTime;
     }
 
     /// <summary>
