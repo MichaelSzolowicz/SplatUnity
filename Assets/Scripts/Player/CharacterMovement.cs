@@ -33,6 +33,7 @@ public class CharacterMovement : MonoBehaviour
     public float maxJumpHeight;
     public float maxJumpHoldTime;
 
+    /* Components */
     protected CapsuleCollider capsule;
 
     protected void Start()
@@ -45,42 +46,50 @@ public class CharacterMovement : MonoBehaviour
         UpdatePhysics(Time.deltaTime);
     }
 
-
     /// <summary>
     /// Gather changes to physics state, like accumulated input and gravity, then apply changes.
     /// </summary>
     protected void UpdatePhysics(float deltaTime)
     {
+        // Update internal physics state
         ApplyGravity(deltaTime);
-        UpdateIsGrounded();
+        UpdateGroundNormal();
 
-        MoveInfo move = new MoveInfo();
+        // Update input based physics state
+        MoveInfo move = new MoveInfo(); // Construct the move
         move.input = ConsumeAccumulatedInput();
         move.time = deltaTime;
 
-        PerformMove(move);
+        PerformMove(move);  // Apply the move to physics state
 
-        if(verticalVel > terminalVelocity) verticalVel = terminalVelocity;
+        // Clamp speed
+        if(Mathf.Abs(verticalVel) > terminalVelocity) verticalVel = terminalVelocity * Mathf.Sign(verticalVel);
         if(horizontalVel.magnitude > maxGroundSpeed) horizontalVel = horizontalVel.normalized * maxGroundSpeed;
+
+        // Construct final delta position
         Vector3 finalVelocity = new Vector3(horizontalVel.x, 0, horizontalVel.y);
+
         if (isGrounded)
         {
+            // Maintain velocity parallel to floor.
+            float speed = finalVelocity.magnitude;
             finalVelocity = Vector3.ProjectOnPlane(finalVelocity, groundNormal);
+            finalVelocity = finalVelocity.normalized * speed;
         }
-        finalVelocity.y += verticalVel;
 
+        finalVelocity.y += verticalVel; // Add in gravity
+
+        // Actual delta position
         Vector3 deltaPos = finalVelocity * deltaTime;
+        if (isGrounded) deltaPos.y -= .01f; // Stick to ground
 
-        // Stick to ground
-        if(isGrounded) deltaPos.y -= .01f;
-
-        // Sweep against new pos
+        // Sweep the move
         RaycastHit[] hits = new RaycastHit[5];
         hits = Physics.CapsuleCastAll(transform.position + Vector3.up * .5f, transform.position - Vector3.up * .5f, .5f, deltaPos.normalized, deltaPos.magnitude);
 
+        // Update position and handle overlaps
         transform.Translate(deltaPos);
-
-        isGrounded = false;
+        isGrounded = false; // Assume not grounded; depentration will determine the correct value.
         foreach (RaycastHit hit in hits)
         {
             Vector3 depenetration = CorrectOverlap(hit);
@@ -105,11 +114,17 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
-        if (isGrounded) verticalVel = -9.8f * gravityScale * deltaTime;
+        // Naive floor "normal impulse"
+        if (isGrounded) verticalVel = 0;
 
         Debug.Log(isGrounded);
     }
 
+    /// <summary>
+    /// Try to depenetrate character from collider in hit.
+    /// </summary>
+    /// <param name="hit"></param>
+    /// <returns>The scaled depentration vector.</returns>
     protected Vector3 CorrectOverlap(RaycastHit hit)
     {
         Collider collider = hit.collider;
@@ -120,7 +135,11 @@ public class CharacterMovement : MonoBehaviour
         return correction * distance;
     }
 
-    protected void UpdateIsGrounded()
+    /// <summary>
+    /// Raycast against the ground to update groundNormal.
+    /// Useful for getting the slope.
+    /// </summary>
+    protected void UpdateGroundNormal()
     {
         Vector3 start = transform.position;
         Vector3 end = transform.position - Vector3.up * ((capsule.height / 2) + 1.1f);
@@ -141,10 +160,12 @@ public class CharacterMovement : MonoBehaviour
         Vector2 a = move.input * acceleration;
         if (a.magnitude > acceleration) { a = a.normalized * acceleration; }
         horizontalVel += a * move.time;
-        //if (!isGrounded) horizontalVel = Vector2.zero;
     }
     
-
+    /// <summary>
+    /// Add downward acceleration equal to -9.8 * gravityScale * deltaTime
+    /// </summary>
+    /// <param name="deltaTime"></param>
     protected void ApplyGravity(float deltaTime)
     {
         verticalVel -= 9.8f * gravityScale * deltaTime;
