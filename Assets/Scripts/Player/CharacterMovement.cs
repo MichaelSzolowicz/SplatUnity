@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class CharacterMovement : MonoBehaviour
@@ -22,6 +23,7 @@ public class CharacterMovement : MonoBehaviour
     protected MoveState currMoveState;
     [Tooltip("Hit info from the most recent probe against ink.")]
     protected RaycastHit surfaceProbeHit;
+    protected Vector3 groundNormal;
 
     /* Public Physics Parameters */
     public float maxGroundSpeed;
@@ -34,12 +36,10 @@ public class CharacterMovement : MonoBehaviour
     public float maxJumpHoldTime;
 
     protected CapsuleCollider capsule;
-    protected Rigidbody rb;
 
     protected void Start()
     {
         capsule = GetComponent<CapsuleCollider>();
-        rb = GetComponent<Rigidbody>();
     }
 
     protected void Update()
@@ -66,6 +66,11 @@ public class CharacterMovement : MonoBehaviour
         Vector3 finalVelocity = new Vector3(horizontalVel.x, verticalVel, horizontalVel.y);
         Vector3 deltaPos = finalVelocity * deltaTime;
 
+        // Maintain velocity parallel to floor
+
+
+        Debug.DrawLine(transform.position, transform.position + deltaPos * 5, Color.red, 1f);
+
         transform.position += deltaPos;
 
         // Sweep against new pos
@@ -76,31 +81,31 @@ public class CharacterMovement : MonoBehaviour
         foreach (RaycastHit hit in hits)
         {
             bool isGroundedSet = false;
-            Vector3 normal = CorrectOverlap(hit);
+            Vector3 depenetration = CorrectOverlap(hit);
 
-            if(normal.magnitude > .01f)
+            depenetration = depenetration.normalized;
+
+            // Is wakable?
+            float angle = Mathf.Acos(Vector3.Dot(depenetration, Vector3.up)) * Mathf.Rad2Deg;
+            if(angle < maxWalkableSlopeAngle)
             {
-                normal = normal.normalized;
-                Debug.DrawLine(hit.point, hit.point + normal * 3, Color.magenta, 10f);
-
-                Vector2 flatNormal = new Vector2(normal.x, normal.z);
+                if (!isGroundedSet)
+                {
+                    isGroundedSet = isGrounded = true;
+                    groundNormal = hit.normal;
+                }
+            }
+            else
+            {
+                // Impulse
+                // Impulse & is walkable might only need to be put in an if statement checking that the depentration is not zero
+                Vector2 flatNormal = new Vector2(depenetration.x, depenetration.z);
                 float velAlongNormal = Vector3.Dot(horizontalVel, flatNormal);
                 horizontalVel -= flatNormal * velAlongNormal;
-
-                Debug.Log(" impulse " + (flatNormal * velAlongNormal));
-
-                float angle = Mathf.Acos(Vector3.Dot(normal, Vector3.up)) * Mathf.Rad2Deg;
-                Debug.Log("angle " + (angle < maxWalkableSlopeAngle));
-                if(!isGroundedSet) isGroundedSet = isGrounded = angle < maxWalkableSlopeAngle;
-            }
+            }   
         }
 
-        //UpdateIsGrounded();
-        //Debug.Log(isGrounded);
-        if (isGrounded) verticalVel = 0;
-
-
-        // Apply remainder of delta pos after correction parallel to surface
+        if (isGrounded) verticalVel = 9.8f * gravityScale * deltaTime;
     }
 
     protected Vector3 CorrectOverlap(RaycastHit hit)
@@ -140,7 +145,7 @@ public class CharacterMovement : MonoBehaviour
         //Debug.Log(isGrounded);
         Vector2 a = move.input * acceleration;
         if (a.magnitude > acceleration) { a = a.normalized * acceleration; }
-        if(isGrounded) horizontalVel += a * move.time;
+        horizontalVel += a * move.time;
     }
     
 
