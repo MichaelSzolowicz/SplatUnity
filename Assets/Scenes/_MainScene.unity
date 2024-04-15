@@ -980,16 +980,20 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3783990365772751404, guid: 66b070b82fb1d24448e1032b7c38633d, type: 3}
+      propertyPath: gravityScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3783990365772751404, guid: 66b070b82fb1d24448e1032b7c38633d, type: 3}
       propertyPath: maxWalkableSlopeAngle
       value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7085861675178472670, guid: 66b070b82fb1d24448e1032b7c38633d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.63
+      value: -1.14
       objectReference: {fileID: 0}
     - target: {fileID: 7085861675178472670, guid: 66b070b82fb1d24448e1032b7c38633d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.71
+      value: 3.66
       objectReference: {fileID: 0}
     - target: {fileID: 7085861675178472670, guid: 66b070b82fb1d24448e1032b7c38633d, type: 3}
       propertyPath: m_LocalPosition.z

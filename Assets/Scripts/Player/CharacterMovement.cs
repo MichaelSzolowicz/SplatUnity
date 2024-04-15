@@ -1,9 +1,7 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
+
 using System.Linq;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class CharacterMovement : MonoBehaviour
@@ -54,6 +52,7 @@ public class CharacterMovement : MonoBehaviour
     protected void UpdatePhysics(float deltaTime)
     {
         ApplyGravity(deltaTime);
+        UpdateIsGrounded();
 
         MoveInfo move = new MoveInfo();
         move.input = ConsumeAccumulatedInput();
@@ -63,49 +62,52 @@ public class CharacterMovement : MonoBehaviour
 
         if(verticalVel > terminalVelocity) verticalVel = terminalVelocity;
         if(horizontalVel.magnitude > maxGroundSpeed) horizontalVel = horizontalVel.normalized * maxGroundSpeed;
-        Vector3 finalVelocity = new Vector3(horizontalVel.x, verticalVel, horizontalVel.y);
+        Vector3 finalVelocity = new Vector3(horizontalVel.x, 0, horizontalVel.y);
+        if (isGrounded)
+        {
+            finalVelocity = Vector3.ProjectOnPlane(finalVelocity, groundNormal);
+        }
+        finalVelocity.y += verticalVel;
+
         Vector3 deltaPos = finalVelocity * deltaTime;
 
-        // Maintain velocity parallel to floor
-
-
-        Debug.DrawLine(transform.position, transform.position + deltaPos * 5, Color.red, 1f);
-
-        transform.position += deltaPos;
+        // Stick to ground
+        if(isGrounded) deltaPos.y -= .01f;
 
         // Sweep against new pos
         RaycastHit[] hits = new RaycastHit[5];
         hits = Physics.CapsuleCastAll(transform.position + Vector3.up * .5f, transform.position - Vector3.up * .5f, .5f, deltaPos.normalized, deltaPos.magnitude);
 
-        if (hits.Length <= 0) isGrounded = false;
+        transform.Translate(deltaPos);
+
+        isGrounded = false;
         foreach (RaycastHit hit in hits)
         {
-            bool isGroundedSet = false;
             Vector3 depenetration = CorrectOverlap(hit);
 
             depenetration = depenetration.normalized;
 
             // Is wakable?
             float angle = Mathf.Acos(Vector3.Dot(depenetration, Vector3.up)) * Mathf.Rad2Deg;
-            if(angle < maxWalkableSlopeAngle)
+            if (angle < maxWalkableSlopeAngle)
             {
-                if (!isGroundedSet)
+                if (!isGrounded)
                 {
-                    isGroundedSet = isGrounded = true;
-                    groundNormal = hit.normal;
+                    isGrounded = true;
                 }
             }
             else
             {
                 // Impulse
-                // Impulse & is walkable might only need to be put in an if statement checking that the depentration is not zero
                 Vector2 flatNormal = new Vector2(depenetration.x, depenetration.z);
                 float velAlongNormal = Vector3.Dot(horizontalVel, flatNormal);
                 horizontalVel -= flatNormal * velAlongNormal;
-            }   
+            }
         }
 
-        if (isGrounded) verticalVel = 9.8f * gravityScale * deltaTime;
+        if (isGrounded) verticalVel = -9.8f * gravityScale * deltaTime;
+
+        Debug.Log(isGrounded);
     }
 
     protected Vector3 CorrectOverlap(RaycastHit hit)
@@ -121,18 +123,12 @@ public class CharacterMovement : MonoBehaviour
     protected void UpdateIsGrounded()
     {
         Vector3 start = transform.position;
-        Vector3 end = transform.position - Vector3.up * ((capsule.height / 2) + .3f);
+        Vector3 end = transform.position - Vector3.up * ((capsule.height / 2) + 1.1f);
         RaycastHit hit;
 
         if (Physics.Linecast(start, end, out hit))
         {
-            float angle = Mathf.Acos(Vector3.Dot(hit.normal, Vector3.up)) * Mathf.Rad2Deg;
-            Debug.Log(angle);
-            isGrounded = angle < maxWalkableSlopeAngle;
-        }
-        else
-        {
-            isGrounded = false;
+            groundNormal = hit.normal;
         }
     }
 
@@ -142,10 +138,10 @@ public class CharacterMovement : MonoBehaviour
     /// <param name="move"></param>
     protected void PerformMove(MoveInfo move)
     {
-        //Debug.Log(isGrounded);
         Vector2 a = move.input * acceleration;
         if (a.magnitude > acceleration) { a = a.normalized * acceleration; }
         horizontalVel += a * move.time;
+        //if (!isGrounded) horizontalVel = Vector2.zero;
     }
     
 
