@@ -444,30 +444,7 @@ public class PlayerController : MonoBehaviour
 
     protected void UpdateAnimation()
     {
-        if (currentMovementState == MovementState.EnemyInk) animator.SetBool("EnemyInk", true);
-        else animator.SetBool("EnemyInk", false);
-
-        if (grounded) animator.SetFloat("InputSpeed", inputVelocity.magnitude);
-        else animator.SetFloat("InputSpeed", 0f);
-
-        if (isSquid)
-        {
-            animator.SetTrigger("EnterSquid");
-            animator.ResetTrigger("ExitSquid");
-        }
-        else
-        {
-            animator.SetTrigger("ExitSquid");
-            animator.ResetTrigger("EnterSquid");
-        }
-
-        if (currentMovementState == MovementState.WallSwimming || currentMovementState == MovementState.Swimming)
-        {
-            mesh.GetComponent<MeshRenderer>().enabled = false;
-        }
-        else
-        {
-            mesh.GetComponent<MeshRenderer>().enabled = true;
-        }
+        Debug.Log(name + " vel " + inputVelocity + " speed " + inputVelocity.magnitude);
+        animator.SetFloat("speed", inputVelocity.magnitude);
     }
 }   
