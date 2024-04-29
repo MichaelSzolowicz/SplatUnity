@@ -444,7 +444,15 @@ public class PlayerController : MonoBehaviour
 
     protected void UpdateAnimation()
     {
-        Debug.Log(name + " vel " + inputVelocity + " speed " + inputVelocity.magnitude);
-        animator.SetFloat("speed", inputVelocity.magnitude);
+        Vector3 rv = Vector3.zero;
+        rv.x = Vector3.Dot(inputVelocity, mesh.transform.right) / maxHorizontalSpeed;
+        if (Mathf.Abs(rv.x) < .1f) rv.x = 0;
+        rv.z = Vector3.Dot(inputVelocity, mesh.transform.forward) / maxHorizontalSpeed;
+        if(Mathf.Abs(rv.z) < .1f) rv.z = 0;
+
+
+        Debug.Log(name + " vel " + rv + " speed " + inputVelocity.magnitude);
+        animator.SetFloat("speedX", rv.x);
+        animator.SetFloat("speedY", rv.z);
     }
 }   
