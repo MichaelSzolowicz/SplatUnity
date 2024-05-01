@@ -94,6 +94,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected float downwardProbeDist = .4f;
 
+    [Header("State")]
+    [SerializeField] protected GameObject kidForm;
+    [SerializeField] protected GameObject octoForm;
+
     protected void Awake()
     {
         //Controls setup
@@ -226,6 +230,10 @@ public class PlayerController : MonoBehaviour
             //print("EnemyInk");
             currentMovementState = MovementState.EnemyInk;
             isSquid = false;
+
+            kidForm.SetActive(true);
+            octoForm.SetActive(false);
+
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
         }
@@ -419,6 +427,9 @@ public class PlayerController : MonoBehaviour
         if (currentMovementState == MovementState.EnemyInk) return;
 
         isSquid = true;
+
+        kidForm.SetActive(false);
+        octoForm.SetActive(true);
     }
 
     protected void ExitSquid(InputAction.CallbackContext context)
@@ -426,6 +437,10 @@ public class PlayerController : MonoBehaviour
         print("Exit Squid");
 
         isSquid = false;
+
+        kidForm.SetActive(true);
+        octoForm.SetActive(false);
+
         currentMovementState = MovementState.Walking;
         maxHorizontalSpeed = baseMaxHorizontalSpeed;
     }
