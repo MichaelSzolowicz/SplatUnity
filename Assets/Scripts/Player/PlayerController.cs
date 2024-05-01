@@ -94,9 +94,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected float downwardProbeDist = .4f;
 
-    [Header("State")]
+    [Header("Transition Effects")]
     [SerializeField] protected GameObject kidForm;
     [SerializeField] protected GameObject octoForm;
+    [SerializeField] protected GameObject toSquidParticle;
+
+    protected IEnumerator toSquidCoroutine;
 
     protected void Awake()
     {
@@ -428,8 +431,24 @@ public class PlayerController : MonoBehaviour
 
         isSquid = true;
 
+        // TODO: Setting to squid coroutine variable every time I call it seems unnecessary.
+        if(toSquidCoroutine != null)
+            StopCoroutine(toSquidCoroutine);
+        toSquidCoroutine = ToSquidCoroutine();
+        StartCoroutine(toSquidCoroutine);   
+    }
+
+    protected IEnumerator ToSquidCoroutine()
+    {
         kidForm.SetActive(false);
         octoForm.SetActive(true);
+
+        toSquidParticle.SetActive(false);
+        toSquidParticle.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+
+        toSquidParticle.SetActive(false);
     }
 
     protected void ExitSquid(InputAction.CallbackContext context)
