@@ -440,13 +440,15 @@ public class PlayerController : MonoBehaviour
 
     protected IEnumerator ToSquidCoroutine()
     {
+        yield return new WaitForSeconds(.5f);
+
         kidForm.SetActive(false);
         octoForm.SetActive(true);
 
         toSquidParticle.SetActive(false);
         toSquidParticle.SetActive(true);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.5f);
 
         toSquidParticle.SetActive(false);
     }
@@ -462,6 +464,8 @@ public class PlayerController : MonoBehaviour
 
         currentMovementState = MovementState.Walking;
         maxHorizontalSpeed = baseMaxHorizontalSpeed;
+
+        StopCoroutine(toSquidCoroutine);
     }
 
     protected void OnPressedShoot(InputAction.CallbackContext context)
@@ -488,5 +492,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log(name + " vel " + rv + " speed " + inputVelocity.magnitude);
         animator.SetFloat("speedX", rv.x);
         animator.SetFloat("speedY", rv.z);
+        animator.SetBool("isSquid", isSquid);
     }
 }   
