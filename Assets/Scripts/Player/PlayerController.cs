@@ -98,6 +98,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected GameObject kidForm;
     [SerializeField] protected GameObject octoForm;
     [SerializeField] protected GameObject toSquidParticle;
+    [SerializeField] protected float squidTransitionDuration;
 
     protected IEnumerator toSquidCoroutine;
 
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
     protected void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
+        prevPos = transform.position;
     }
 
     protected void Update()
@@ -440,17 +442,13 @@ public class PlayerController : MonoBehaviour
 
     protected IEnumerator ToSquidCoroutine()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(squidTransitionDuration);
 
         kidForm.SetActive(false);
         octoForm.SetActive(true);
 
         toSquidParticle.SetActive(false);
         toSquidParticle.SetActive(true);
-
-        yield return new WaitForSeconds(.5f);
-
-        toSquidParticle.SetActive(false);
     }
 
     protected void ExitSquid(InputAction.CallbackContext context)
@@ -480,18 +478,23 @@ public class PlayerController : MonoBehaviour
         shooter.StopShooting();
     }
 
+    Vector3 prevPos;
+
     protected void UpdateAnimation()
     {
-        Vector3 rv = Vector3.zero;
-        rv.x = Vector3.Dot(inputVelocity, mesh.transform.right) / maxHorizontalSpeed;
-        if (Mathf.Abs(rv.x) < .1f) rv.x = 0;
-        rv.z = Vector3.Dot(inputVelocity, mesh.transform.forward) / maxHorizontalSpeed;
-        if(Mathf.Abs(rv.z) < .1f) rv.z = 0;
+        Vector3 dp = transform.position - prevPos;
+        dp = (dp / Time.fixedDeltaTime);
+        prevPos = transform.position;
+
+        dp.x = Vector3.Dot(inputVelocity, mesh.transform.right) / maxHorizontalSpeed;
+        if (Mathf.Abs(dp.x) < .25f) dp.x = 0;
+        dp.z = Vector3.Dot(inputVelocity, mesh.transform.forward) / maxHorizontalSpeed;
+        if(Mathf.Abs(dp.z) < .25f) dp.z = 0;
 
 
-        Debug.Log(name + " vel " + rv + " speed " + inputVelocity.magnitude);
-        animator.SetFloat("speedX", rv.x);
-        animator.SetFloat("speedY", rv.z);
+        Debug.Log(name + " vel " + dp + " speed " + inputVelocity.magnitude);
+        animator.SetFloat("speedX", dp.x);
+        animator.SetFloat("speedY", dp.z);
         animator.SetBool("isSquid", isSquid);
     }
 }   

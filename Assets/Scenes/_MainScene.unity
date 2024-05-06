@@ -2783,6 +2783,7 @@ MonoBehaviour:
   kidForm: {fileID: 4800295622896355755}
   octoForm: {fileID: 1262286987}
   toSquidParticle: {fileID: 373907825}
+  squidTransitionDuration: 0.1
 --- !u!54 &4800295623842811345
 Rigidbody:
   m_ObjectHideFlags: 0
