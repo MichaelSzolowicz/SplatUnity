@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MidTower
+  m_Name: BrickWall
   m_Shader: {fileID: -6465566751694194690, guid: 5fca8368123c2a7419bd69fdc1c69285, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,11 +24,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: ffca85458f05134408d808bf5507c4ec, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 99f0896ddeb91a14fb7d269ec7f092b4, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -48,11 +48,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ffca85458f05134408d808bf5507c4ec, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: dd0a1288623e4e84c9e54172c8ab318d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -68,15 +68,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _baseColor:
-        m_Texture: {fileID: 2800000, guid: ffca85458f05134408d808bf5507c4ec, type: 3}
+        m_Texture: {fileID: 2800000, guid: 286abb044fdc7224a88a364356ab174f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _metallicSmoothness:
-        m_Texture: {fileID: 2800000, guid: dd0a1288623e4e84c9e54172c8ab318d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 135e6cc4ac2fda7439d7fc61d30bcab4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _normal:
-        m_Texture: {fileID: 2800000, guid: 99f0896ddeb91a14fb7d269ec7f092b4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 62e45919b83e01d48a3260dd695e7190, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _splatmask:
@@ -144,7 +144,7 @@ Material:
     - _inkColor1: {r: 1, g: 0, b: 0, a: 0}
     - _inkColor2: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &498642942618719571
+--- !u!114 &3325015304922324197
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
