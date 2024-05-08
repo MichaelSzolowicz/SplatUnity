@@ -31,12 +31,13 @@ public class PlayerController : MonoBehaviour
     public GameObject mesh;
     public ThirdPersonCamera cameraControls;
     public CapsuleCollider capsule;
-    public Shooter shooter;
     public Animator animator;
 
     /** Internal objects **/
     protected PlayerControls playerControls;
     protected SplatmaskReader SplatmaskReader;
+    protected Shooter shooter;
+    public Shooter Shooter { get { return shooter; } set { shooter = value; } }
 
     /** Movement state control **/
     [SerializeField]
@@ -94,6 +95,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     protected float downwardProbeDist = .4f;
 
+    [Header("Transition Effects")]
+    [SerializeField] protected GameObject kidForm;
+    [SerializeField] protected GameObject octoForm;
+    [SerializeField] protected GameObject toSquidParticle;
+    [SerializeField] protected float squidTransitionDuration;
+
+    protected IEnumerator toSquidCoroutine;
+
     protected void Awake()
     {
         //Controls setup
@@ -121,6 +130,7 @@ public class PlayerController : MonoBehaviour
     protected void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
+        prevPos = transform.position;
     }
 
     protected void Update()
@@ -226,6 +236,10 @@ public class PlayerController : MonoBehaviour
             //print("EnemyInk");
             currentMovementState = MovementState.EnemyInk;
             isSquid = false;
+
+            kidForm.SetActive(true);
+            octoForm.SetActive(false);
+
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
         }
@@ -419,6 +433,23 @@ public class PlayerController : MonoBehaviour
         if (currentMovementState == MovementState.EnemyInk) return;
 
         isSquid = true;
+
+        // TODO: Setting to squid coroutine variable every time I call it seems unnecessary.
+        if(toSquidCoroutine != null)
+            StopCoroutine(toSquidCoroutine);
+        toSquidCoroutine = ToSquidCoroutine();
+        StartCoroutine(toSquidCoroutine);   
+    }
+
+    protected IEnumerator ToSquidCoroutine()
+    {
+        yield return new WaitForSeconds(squidTransitionDuration);
+
+        kidForm.SetActive(false);
+        octoForm.SetActive(true);
+
+        toSquidParticle.SetActive(false);
+        toSquidParticle.SetActive(true);
     }
 
     protected void ExitSquid(InputAction.CallbackContext context)
@@ -426,8 +457,14 @@ public class PlayerController : MonoBehaviour
         print("Exit Squid");
 
         isSquid = false;
+
+        kidForm.SetActive(true);
+        octoForm.SetActive(false);
+
         currentMovementState = MovementState.Walking;
         maxHorizontalSpeed = baseMaxHorizontalSpeed;
+
+        StopCoroutine(toSquidCoroutine);
     }
 
     protected void OnPressedShoot(InputAction.CallbackContext context)
@@ -442,32 +479,23 @@ public class PlayerController : MonoBehaviour
         shooter.StopShooting();
     }
 
+    Vector3 prevPos;
+
     protected void UpdateAnimation()
     {
-        if (currentMovementState == MovementState.EnemyInk) animator.SetBool("EnemyInk", true);
-        else animator.SetBool("EnemyInk", false);
+        Vector3 dp = transform.position - prevPos;
+        dp = (dp / Time.fixedDeltaTime);
+        prevPos = transform.position;
 
-        if (grounded) animator.SetFloat("InputSpeed", inputVelocity.magnitude);
-        else animator.SetFloat("InputSpeed", 0f);
+        dp.x = Vector3.Dot(inputVelocity, mesh.transform.right) / maxHorizontalSpeed;
+        if (Mathf.Abs(dp.x) < .25f) dp.x = 0;
+        dp.z = Vector3.Dot(inputVelocity, mesh.transform.forward) / maxHorizontalSpeed;
+        if(Mathf.Abs(dp.z) < .25f) dp.z = 0;
 
-        if (isSquid)
-        {
-            animator.SetTrigger("EnterSquid");
-            animator.ResetTrigger("ExitSquid");
-        }
-        else
-        {
-            animator.SetTrigger("ExitSquid");
-            animator.ResetTrigger("EnterSquid");
-        }
 
-        if (currentMovementState == MovementState.WallSwimming || currentMovementState == MovementState.Swimming)
-        {
-            mesh.GetComponent<MeshRenderer>().enabled = false;
-        }
-        else
-        {
-            mesh.GetComponent<MeshRenderer>().enabled = true;
-        }
+        //Debug.Log(name + " vel " + dp + " speed " + inputVelocity.magnitude);
+        animator.SetFloat("speedX", dp.x);
+        animator.SetFloat("speedY", dp.z);
+        animator.SetBool("isSquid", isSquid);
     }
 }   

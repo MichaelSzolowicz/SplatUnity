@@ -7,6 +7,9 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     protected float maxLifetime, stickTime;
 
+    protected Player instigator;
+    public Player Instigator { get { return instigator; } set { instigator = value; } }  
+
     protected void Start()
     {
         Invoke("DestroySelf", maxLifetime);

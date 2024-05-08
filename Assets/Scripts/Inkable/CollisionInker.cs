@@ -17,8 +17,8 @@ public class CollisionInker : Inker
         SplatableObject splatObj = collision.collider.GetComponent<SplatableObject>();
         if(splatObj)
         {
-            Debug.Log(name + " hit " + collision.gameObject.name);
-            Debug.DrawLine(collision.contacts[0].point, collision.contacts[0].point + collision.contacts[0].normal * 3, Color.magenta, 0.1f);
+            //Debug.Log(name + " hit " + collision.gameObject.name);
+            //Debug.DrawLine(collision.contacts[0].point, collision.contacts[0].point + collision.contacts[0].normal * 3, Color.magenta, 0.1f);
 
             splatObj.DrawSplat(collision.contacts[0].point, collision.contacts[0].normal, radius, hardness, strength, inkColor);
         }

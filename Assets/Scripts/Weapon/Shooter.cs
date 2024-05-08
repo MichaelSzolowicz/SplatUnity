@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
+    public Player instigator;
+
     [SerializeField]
-    protected GameObject projectilePrefab;
+    protected Projectile projectilePrefab;
 
     [SerializeField]
     protected float fireRate;
@@ -35,9 +37,10 @@ public class Shooter : MonoBehaviour
 
     public void Shoot()
     {
-        GameObject obj = Instantiate(projectilePrefab, transform.position, transform.rotation);
+        Projectile newProjectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
+        newProjectile.Instigator = instigator;
 
-        Rigidbody rigidbody = obj.GetComponent<Rigidbody>();
+        Rigidbody rigidbody = newProjectile.GetComponent<Rigidbody>();
         if(rigidbody)
         {
             Vector3 direction = transform.forward;
