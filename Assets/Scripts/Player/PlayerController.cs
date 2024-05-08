@@ -31,12 +31,13 @@ public class PlayerController : MonoBehaviour
     public GameObject mesh;
     public ThirdPersonCamera cameraControls;
     public CapsuleCollider capsule;
-    public Shooter shooter;
     public Animator animator;
 
     /** Internal objects **/
     protected PlayerControls playerControls;
     protected SplatmaskReader SplatmaskReader;
+    protected Shooter shooter;
+    public Shooter Shooter { get { return shooter; } set { shooter = value; } }
 
     /** Movement state control **/
     [SerializeField]
@@ -492,7 +493,7 @@ public class PlayerController : MonoBehaviour
         if(Mathf.Abs(dp.z) < .25f) dp.z = 0;
 
 
-        Debug.Log(name + " vel " + dp + " speed " + inputVelocity.magnitude);
+        //Debug.Log(name + " vel " + dp + " speed " + inputVelocity.magnitude);
         animator.SetFloat("speedX", dp.x);
         animator.SetFloat("speedY", dp.z);
         animator.SetBool("isSquid", isSquid);

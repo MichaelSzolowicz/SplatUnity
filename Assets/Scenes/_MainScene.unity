@@ -797,6 +797,63 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1001 &857424622
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293512023844351249, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477844127179576613, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
+      propertyPath: m_Name
+      value: Balloon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aedc2427fab357e4689c1096bf2cae1a, type: 3}
 --- !u!1 &863663238
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2697,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ea0668a56e0a9b4ea7a31fd39a48fbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5393962742692073304, guid: 8147c8318d77f974c9f85699fc8cb150, type: 3}
+  instigator: {fileID: 0}
+  projectilePrefab: {fileID: -649716097143579931, guid: 8147c8318d77f974c9f85699fc8cb150, type: 3}
   fireRate: 0.05
   launchStrength: 14
   xVariance: 0.2
@@ -2806,7 +2864,6 @@ MonoBehaviour:
   mesh: {fileID: 1015887594}
   cameraControls: {fileID: 8756477464117185127}
   capsule: {fileID: 4800295623842811356}
-  shooter: {fileID: 3925857458078512606}
   animator: {fileID: 3199070138901898662}
   team: {x: 0, y: 0, z: 0, w: 0}
   currentMovementState: 0
@@ -2909,6 +2966,7 @@ GameObject:
   - component: {fileID: 4800295623842811347}
   - component: {fileID: 4800295623842811356}
   - component: {fileID: 4800295623842811345}
+  - component: {fileID: 4800295623842811360}
   - component: {fileID: 4800295623842811344}
   m_Layer: 2
   m_Name: SquidKid
@@ -2917,6 +2975,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &4800295623842811360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4800295623842811359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35bc131e88873e45bee56e11f396e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  weapon: {fileID: 3925857458078512606}
 --- !u!4 &4960737890845505184
 Transform:
   m_ObjectHideFlags: 0
@@ -4003,3 +4075,4 @@ SceneRoots:
   - {fileID: 1252710336}
   - {fileID: 635143851}
   - {fileID: 137620555}
+  - {fileID: 857424622}
