@@ -9,8 +9,11 @@ using UnityEngine;
 public class Player : PlayerStub
 {
     public Shooter weapon;
+    public HUDActions HUD;
 
     protected PlayerController controller;
+
+    protected int score;
 
     protected void Start()
     {
@@ -18,6 +21,9 @@ public class Player : PlayerStub
 
         controller = GetComponent<PlayerController>();
         controller.Shooter = weapon;
+
+        HUD.SetScore(score);
+        HUD.SetNumBalloons(Balloon.NumBalloons);
     }
 
     /// <summary>
@@ -27,5 +33,9 @@ public class Player : PlayerStub
     public void AddScore(int pointValue)
     {
         Debug.Log(name + " received " + pointValue + " points.");
+
+        score += pointValue;
+
+        HUD.SetScore(score);
     }
 }

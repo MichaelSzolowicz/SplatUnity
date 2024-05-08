@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour
 {
+    private static int numBalloons;
+    public static int NumBalloons {  get { return numBalloons; } }
+
     [SerializeField] protected int pointValue;
+
+    protected void Awake()
+    {
+        numBalloons++;
+    }
 
     protected void OnTriggerEnter(Collider other)
     {
@@ -17,5 +25,10 @@ public class Balloon : MonoBehaviour
 
             gameObject.SetActive(false);
         }
+    }
+
+    protected void OnDestroy()
+    {
+        numBalloons--;
     }
 }
