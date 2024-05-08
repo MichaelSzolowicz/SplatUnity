@@ -5,11 +5,32 @@ using UnityEngine;
 
 public class BalloonsGameMode : Singleton<BalloonsGameMode>
 {
-    [SerializeField] protected float timeLimitMinutes, timeLimitSeconds;
+    protected float elapsedGameTime;
+    public float ElapsedGameTime { get { return elapsedGameTime; } }    
+
+    protected bool isGameRunning;
+    public bool IsGameRunning {  get { return isGameRunning; } }    
 
     protected void Start()
     {
-        // Convert all time limits to seconds.
-        timeLimitSeconds = timeLimitSeconds + (timeLimitMinutes * 60);
+        InitGame();
+    }
+
+    protected void InitGame()
+    {
+        elapsedGameTime = 0;
+
+        isGameRunning = true;
+
+        StartCoroutine(UpdateTimer());
+    }
+
+    protected IEnumerator UpdateTimer()
+    {
+        while (isGameRunning)
+        {
+            elapsedGameTime += 1.0f;
+            yield return new WaitForSeconds(1);
+        }
     }
 }
