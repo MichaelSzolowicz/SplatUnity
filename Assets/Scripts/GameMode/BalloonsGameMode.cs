@@ -11,6 +11,11 @@ public class BalloonsGameMode : Singleton<BalloonsGameMode>
     protected bool isGameRunning;
     public bool IsGameRunning {  get { return isGameRunning; } }    
 
+    public BalloonsGameMode() 
+    {
+        isGameRunning = true;
+    }
+
     protected void Start()
     {
         InitGame();
@@ -19,7 +24,6 @@ public class BalloonsGameMode : Singleton<BalloonsGameMode>
     protected void InitGame()
     {
         elapsedGameTime = 0;
-
         isGameRunning = true;
 
         StartCoroutine(UpdateTimer());
