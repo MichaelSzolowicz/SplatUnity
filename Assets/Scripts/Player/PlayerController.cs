@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Tooltip("True if the character is colliding.")]
     protected bool grounded;
 
+    public Vector3 Velocity { get { return inputVelocity + verticalVelocity; } }
+
     /** Adjustable properties **/
     [Header("Movement"), SerializeField]
     protected float maxAcceleration = 1.0f;
@@ -461,6 +463,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(squidTransitionDuration);
 
         isSquid = true;
+
+        octoForm.transform.LookAt(transform.position + Quaternion.AngleAxis(cameraControls.yRotation, Vector3.up) * Vector3.forward);  
 
         kidForm.SetActive(false);
         octoForm.SetActive(true);
