@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
     protected void Update()
     {
         /// Camera rotation
-        Vector2 mouseDelta = playerControls.Walking.Camera.ReadValue<Vector2>();
+        Vector2 mouseDelta = playerControls.Walking.Camera.ReadValue<Vector2>() * Time.timeScale;
         cameraControls.CameraUpdate(mouseDelta.x, mouseDelta.y);
         mesh.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, cameraControls.yRotation, transform.rotation.eulerAngles.z);
         shooter.transform.rotation = Quaternion.LookRotation(cameraControls.cameraTransform.forward);

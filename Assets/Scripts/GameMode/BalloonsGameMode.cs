@@ -44,6 +44,7 @@ public class BalloonsGameMode : Singleton<BalloonsGameMode>
         if(Balloon.NumBalloons <= 0)
         {
             Time.timeScale = 0.0f;
+            isGameRunning = false;
         }
     }
 }
