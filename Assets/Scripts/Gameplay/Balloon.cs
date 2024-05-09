@@ -27,8 +27,10 @@ public class Balloon : MonoBehaviour
         }
     }
 
-    protected void OnDestroy()
+    protected void OnDisable()
     {
         numBalloons--;
+
+        GameEventBus.Publish(GameEvent.BalloonPopped);
     }
 }
