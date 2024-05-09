@@ -220,6 +220,10 @@ public class PlayerController : MonoBehaviour
             currentMovementState = MovementState.WallSwimming;
             maxHorizontalSpeed =  baseMaxHorizontalSpeed;
             grounded = false;
+
+            octoForm.SetActive(false);
+            kidForm.SetActive(false);
+
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
         }
@@ -237,8 +241,8 @@ public class PlayerController : MonoBehaviour
             currentMovementState = MovementState.EnemyInk;
             isSquid = false;
 
-            kidForm.SetActive(true);
             octoForm.SetActive(false);
+            kidForm.SetActive(true);
 
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
@@ -256,6 +260,10 @@ public class PlayerController : MonoBehaviour
             print("Swimming");
             currentMovementState = MovementState.Swimming;
             if (playerControls.Walking.Squid.IsPressed() && !isSquid) EnterSquid(new InputAction.CallbackContext());
+
+            octoForm.SetActive(false);
+            kidForm.SetActive(false);
+
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
         }
@@ -264,8 +272,11 @@ public class PlayerController : MonoBehaviour
         //print("Walking");
         currentMovementState = MovementState.Walking;
         maxHorizontalSpeed = baseMaxHorizontalSpeed;
-        
+
         if (playerControls.Walking.Squid.IsPressed() && !isSquid) EnterSquid(new InputAction.CallbackContext());
+
+        octoForm.SetActive(isSquid);
+        kidForm.SetActive(!isSquid);
 
         Invoke("UpdateMovementState", updateMovementStateDelay);
         return;
@@ -432,10 +443,12 @@ public class PlayerController : MonoBehaviour
         // Can't swim in enemy ink
         if (currentMovementState == MovementState.EnemyInk) return;
 
-        isSquid = true;
+        if (!context.performed) return;
+
+        animator.SetBool("isSquid", true);
 
         // TODO: Setting to squid coroutine variable every time I call it seems unnecessary.
-        if(toSquidCoroutine != null)
+        if (toSquidCoroutine != null)
             StopCoroutine(toSquidCoroutine);
         toSquidCoroutine = ToSquidCoroutine();
         StartCoroutine(toSquidCoroutine);   
@@ -443,7 +456,11 @@ public class PlayerController : MonoBehaviour
 
     protected IEnumerator ToSquidCoroutine()
     {
+        Debug.Log("To Squid Coroutine");
+
         yield return new WaitForSeconds(squidTransitionDuration);
+
+        isSquid = true;
 
         kidForm.SetActive(false);
         octoForm.SetActive(true);
@@ -455,6 +472,8 @@ public class PlayerController : MonoBehaviour
     protected void ExitSquid(InputAction.CallbackContext context)
     {
         print("Exit Squid");
+
+        animator.SetBool("isSquid", false);
 
         isSquid = false;
 
@@ -496,6 +515,6 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name + " vel " + dp + " speed " + inputVelocity.magnitude);
         animator.SetFloat("speedX", dp.x);
         animator.SetFloat("speedY", dp.z);
-        animator.SetBool("isSquid", isSquid);
+        //animator.SetBool("isSquid", currentMovementState == MovementState.Swimming || currentMovementState == MovementState.WallSwimming);
     }
 }   
