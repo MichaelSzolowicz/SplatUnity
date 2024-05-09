@@ -2,22 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : MonoBehaviour
+public class RedBalloon : Balloon
 {
     private static int numBalloons;
-    public static int NumBalloons {  get { return numBalloons; } }
+    private BalloonChainInfoStruct chainInfo;
 
     [SerializeField] protected int pointValue;
 
     protected void Awake()
     {
-        numBalloons++;
+        chainInfo = new BalloonChainInfoStruct();
+        chainInfo.color = BalloonColor.Red;
+
+        chainInfo.numRemainingBalloons = ++numBalloons;
     }
 
     protected void OnTriggerEnter(Collider other)
     {
         Projectile projectile = other.GetComponent<Projectile>();
-        if(projectile != null)
+        if (projectile != null)
         {
             Debug.Log(name + " popped by " + projectile.Instigator.name);
 
@@ -27,8 +30,8 @@ public class Balloon : MonoBehaviour
         }
     }
 
-    protected void OnDestroy()
+    protected void OnDisable()
     {
-        numBalloons--;
+        chainInfo.numRemainingBalloons = --numBalloons;
     }
 }
