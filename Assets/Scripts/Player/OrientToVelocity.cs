@@ -23,7 +23,7 @@ public class OrientToVelocity : MonoBehaviour
 
         direction = Vector3.Normalize(direction);
 
-        direction = Vector3.Lerp(transform.forward, direction, speed * Time.deltaTime);
+        //direction = Vector3.Lerp(transform.forward, direction, speed * Time.deltaTime);
 
         transform.LookAt(transform.position + direction);    
 

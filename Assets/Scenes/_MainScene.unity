@@ -3410,9 +3410,10 @@ MonoBehaviour:
   braking: 20
   wallClimbStrength: 30
   ledgeReducedAcceleration: 10
+  jumpForce: 400
   gravityScale: 1.55
-  minSlopeGradation: 0.5
-  slopeCheckTolerance: 0.01
+  minSlopeGradation: 0.99
+  slopeCheckTolerance: 0
   inkAlphaMinThreshold: 0
   updateMovementStateDelay: 0.032
   enemyInkSlowingFactor: 0.2

@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     protected Vector3 groundNormal;
     [SerializeField, Tooltip("True if the character is colliding.")]
     protected bool grounded;
+    protected Vector3 pendingJumpForce;
 
     public Vector3 Velocity { get { return inputVelocity + verticalVelocity; } }
 
@@ -76,6 +77,8 @@ public class PlayerController : MonoBehaviour
     protected float wallClimbStrength;
     [SerializeField]
     protected float ledgeReducedAcceleration = 10.0f;
+    [SerializeField]
+    protected float jumpForce = 10;
 
     [Header("Gravity"), SerializeField]
     protected float gravityScale = 1.0f;
@@ -114,6 +117,7 @@ public class PlayerController : MonoBehaviour
         playerControls.Walking.Squid.canceled += ExitSquid;
         playerControls.Walking.Shoot.performed += OnPressedShoot;
         playerControls.Walking.Shoot.canceled += OnReleaseShoot;
+        playerControls.Walking.Jump.performed += Jump;
 
         //Default values
         defaultGravityScale = gravityScale;
@@ -364,9 +368,17 @@ public class PlayerController : MonoBehaviour
 
             delta += verticalVelocity * Time.fixedDeltaTime;
         }
+        else
+        {
+            verticalVelocity += pendingJumpForce * Time.fixedDeltaTime;
+            delta += verticalVelocity * Time.fixedDeltaTime;
+            pendingJumpForce = Vector3.zero;
+        }
 
         transform.position += delta;
         pendingInputForce = Vector3.zero;
+
+        //Debug.Log(name + " movement state = " + currentMovementState.ToString());
     }
 
     /// <summary>
@@ -408,13 +420,25 @@ public class PlayerController : MonoBehaviour
     protected void HandleCollision(Collision collision)
     {
         // Check if the slope is walkable
-        if (Vector3.Dot(collision.GetContact(0).normal, Vector3.up) - slopeCheckTolerance > minSlopeGradation)
+        foreach(ContactPoint contactPoint in collision.contacts)
         {
-            grounded = true;
-            verticalVelocity.y = 0f;
+            if (Vector3.Dot(contactPoint.normal, Vector3.up) - slopeCheckTolerance > minSlopeGradation)
+            {
+                grounded = true;
+                verticalVelocity.y = 0f;
+                break;
+            }
+            else
+            {
+                grounded = false;
+            }
         }
 
+
         groundNormal = collision.GetContact(0).normal;
+
+        Debug.Log(name + " Ground Normal: " + groundNormal);
+        Debug.Log(name + " comparision dot: " + (Vector3.Dot(collision.GetContact(0).normal, Vector3.up) - slopeCheckTolerance));
 
         // Correct our position wo the capsule doesn't clip inside other geometry.
         Vector3 correction;
@@ -500,6 +524,12 @@ public class PlayerController : MonoBehaviour
     {
         print("stop shooting");
         shooter.StopShooting();
+    }
+
+    protected void Jump(InputAction.CallbackContext context)
+    {
+        Debug.Log(name + " jump.");
+        pendingJumpForce = (Vector3.up * jumpForce);
     }
 
     Vector3 prevPos;
