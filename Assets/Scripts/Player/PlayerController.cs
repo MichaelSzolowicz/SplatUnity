@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public ThirdPersonCamera cameraControls;
     public CapsuleCollider capsule;
     public Animator animator;
+    public SkinnedMeshRenderer meshRenderer;
 
     /** Internal objects **/
     protected PlayerControls playerControls;
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
     protected bool grounded;
     protected Vector3 pendingJumpForce;
 
-    public Vector3 Velocity { get { return inputVelocity + verticalVelocity; } }
+    public Vector3 Velocity { get { return prevDelta.normalized * (inputVelocity + verticalVelocity).magnitude; } }
 
     /** Adjustable properties **/
     [Header("Movement"), SerializeField]
@@ -229,10 +230,12 @@ public class PlayerController : MonoBehaviour
 
             octoForm.SetActive(false);
             kidForm.SetActive(false);
+            //meshRenderer.enabled = false;
 
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
         }
+
 
         /// Enemy ink
         if (color.a > inkAlphaMinThreshold && color.g > color.r)
@@ -249,6 +252,7 @@ public class PlayerController : MonoBehaviour
 
             octoForm.SetActive(false);
             kidForm.SetActive(true);
+            //meshRenderer.enabled = true;
 
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
@@ -269,6 +273,7 @@ public class PlayerController : MonoBehaviour
 
             octoForm.SetActive(false);
             kidForm.SetActive(false);
+            //meshRenderer.enabled = false;
 
             Invoke("UpdateMovementState", updateMovementStateDelay);
             return;
@@ -283,6 +288,7 @@ public class PlayerController : MonoBehaviour
 
         octoForm.SetActive(isSquid);
         kidForm.SetActive(!isSquid);
+        //meshRenderer.enabled = !isSquid;
 
         Invoke("UpdateMovementState", updateMovementStateDelay);
         return;
@@ -378,8 +384,12 @@ public class PlayerController : MonoBehaviour
         transform.position += delta;
         pendingInputForce = Vector3.zero;
 
+        prevDelta = delta;
+
         //Debug.Log(name + " movement state = " + currentMovementState.ToString());
     }
+
+    Vector3 prevDelta = Vector3.zero;
 
     /// <summary>
     /// Adds the provided force, and the internal pendingVerticalInput to pendingInputForce and pendingVerticalInput respectively.
@@ -488,9 +498,10 @@ public class PlayerController : MonoBehaviour
 
         isSquid = true;
 
-        octoForm.transform.LookAt(transform.position + Quaternion.AngleAxis(cameraControls.yRotation, Vector3.up) * Vector3.forward);  
+        octoForm.transform.LookAt(transform.position + Quaternion.AngleAxis(cameraControls.yRotation, Vector3.up) * Vector3.forward);
 
         kidForm.SetActive(false);
+        //meshRenderer.enabled = false;
         octoForm.SetActive(true);
 
         toSquidParticle.SetActive(false);
@@ -506,6 +517,7 @@ public class PlayerController : MonoBehaviour
         isSquid = false;
 
         kidForm.SetActive(true);
+        //meshRenderer.enabled = true;
         octoForm.SetActive(false);
 
         currentMovementState = MovementState.Walking;

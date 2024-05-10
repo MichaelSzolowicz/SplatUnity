@@ -1647,7 +1647,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e0657b7bd14264a9734db295282588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
   playerController: {fileID: 4800295623842811344}
 --- !u!1001 &1384587031
 PrefabInstance:
@@ -3400,6 +3399,7 @@ MonoBehaviour:
   cameraControls: {fileID: 8756477464117185127}
   capsule: {fileID: 4800295623842811356}
   animator: {fileID: 3199070138901898662}
+  meshRenderer: {fileID: 9205357763621744391}
   team: {x: 0, y: 0, z: 0, w: 0}
   currentMovementState: 0
   isSquid: 0
@@ -3412,14 +3412,14 @@ MonoBehaviour:
   ledgeReducedAcceleration: 10
   jumpForce: 400
   gravityScale: 1.55
-  minSlopeGradation: 0.99
+  minSlopeGradation: 0.5
   slopeCheckTolerance: 0
   inkAlphaMinThreshold: 0
   updateMovementStateDelay: 0.032
   enemyInkSlowingFactor: 0.2
   swimSpeedMultiplier: 2
   downwardProbeDist: 0.4
-  kidForm: {fileID: 4800295622896355755}
+  kidForm: {fileID: 1054970598860357811}
   octoForm: {fileID: 1262286987}
   toSquidParticle: {fileID: 373907825}
   squidTransitionDuration: 0.2
